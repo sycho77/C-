@@ -1,0 +1,208 @@
+
+#include <iostream>
+#include<string>
+#include<vector>
+#include<fstream>
+#include "classes.cpp"
+using namespace std;
+
+int ID = 0;
+
+Student::Student(string name, string password){
+  this -> name=name;
+  this->username=++ID;
+  this->password=password;
+}
+
+int main() {
+  //vector declaration
+  vector <Courses> college;//collection
+  vector <Student> students;
+  //opening files
+  fstream coursesFile, studentsFile;
+  string coursesName = "College courses.txt";
+  string courseStudents = "students.txt";
+  coursesFile.open(coursesName.data());
+  studentsFile.open(courseStudents.data());
+  //going to beggining of files
+  coursesFile.clear();//pointer beggining
+  coursesFile.seekg(0, ios::beg);
+  studentsFile.clear();
+  studentsFile.clear();
+
+  string course, professor, dummy;
+  int student, availability;
+  
+  string name, password, courses;
+  int username;
+  //reading from the student's file
+  while(!studentsFile.eof()){
+    getline(studentsFile, name);
+    studentsFile >> username;
+    getline(studentsFile, dummy);
+    getline(studentsFile, password);
+    getline(studentsFile, courses);
+     students.push_back(Student(name, username, password, courses));
+    }
+
+  vector<string> temp;
+  //home
+  //printing student data on console
+  for(int i=0;i<students.size();i++){
+    cout << "Name: " << students.at(i).getName() << " ";
+    cout << "Username: " << students.at(i).getUsername() << " ";
+    cout << "Password: " << students.at(i).getPassword() << " ";
+    cout << "Courses: " << endl;
+    temp= students.at(i).getClass();
+    if (temp.size()!=0){
+      for (int j=0; j<temp.size(); j++){
+        cout << temp.at(j) << endl;
+      }
+      temp.clear();
+    }
+    else cout << "None";
+    cout << endl;
+  }
+  cout << endl;
+
+  ID = students.size();
+//reading courses data
+  while(!coursesFile.eof()){
+    getline(coursesFile, course);
+    getline(coursesFile, professor);
+    coursesFile >> student;
+    getline(coursesFile, dummy);
+    coursesFile >> availability;
+    getline(coursesFile, dummy);
+     college.push_back(Courses(course, professor, student, availability));
+
+  }
+//printing on console
+  for(int i=0;i<college.size(); i++){
+    cout << "Class: " << college.at(i).getClass() << " ";
+    cout << "Professor: " << college.at(i).getProfessor() << " ";
+    cout << "Student: " << college.at(i).getStudent() << " ";
+    cout << "Availability: " << college.at(i).getAvailable() << " ";
+    cout << endl;
+  }
+
+  // for(int i=0;i<college.size(); i++){
+  //   college.at(i).addStudent();
+  // }
+  
+//Log In and Sign up
+int option;
+string lastname;
+cout << "Welcome to the College Schedule Program\n\n";
+cout << "Choose one option \n\n";
+cout << "1. Log in to your account\n";
+cout << "2. Create a new account\n";
+cin >> option;
+
+if(option==1){
+  cout << "Username: ";
+  cin >> username;
+  cout << "Password: ";
+  cin >> password; //++check valid username
+
+  if(password == students.at(username-1).getPassword()){
+    cout << "Hello "<< students.at(username-1).getName() << endl;
+  }
+  else{
+    cout << "Invalid Password"<< endl;//++another chance
+  }
+}
+else if(option==2){
+  cout << "First Name: ";
+  cin >> name;
+  cout << "Last Name: ";
+  cin >>lastname;
+  cout << "Choose a password: ";
+  cin >> password;
+  students.push_back(Student(name +" "+ lastname, password));
+  cout << "Account created successfully. Your username is: ";
+  cout << ID << endl;
+  username = ID;
+}
+
+
+  cout<< endl<<"**Which class do you want to apply to? (or enter quit to exit)**"<<endl;
+  string choice;
+  cin>>choice;
+  bool found=false;
+  int i;
+  while(choice!="quit"){
+  
+  for(i=0;i<college.size();i++){
+     if(college.at(i).getClass()==choice){
+       //college.at(i).setStudent();//change value of student (-1)
+      found=true;
+     break;
+       //check if the student is already in class
+        }
+  }
+     if(found){
+       if(college.at(i).addStudent()){
+       students.at(username-1).addClass(choice);//adding class to the list
+       cout << "Success, you have been added to the class"<<endl;}
+       else cout<<"The class is full"<<endl;
+     }
+
+     else{
+       cout << "Class not found"<<endl;
+      }
+      found=false;
+       cout<< endl<<"**Which class do you want to apply to? (or enter quit to exit)**"<<endl;
+       cin >> choice;
+  }
+ 
+  
+  coursesFile.clear();
+  coursesFile.seekg(0, ios::beg);//go back to beggining of file
+
+  for(int i=0;i<college.size(); i++){ //writing back course info to file
+    coursesFile << college.at(i).getClass() <<endl;
+    coursesFile << college.at(i).getProfessor() << endl;
+    coursesFile << college.at(i).getStudent() << endl;
+    coursesFile << college.at(i).getAvailable();
+    if(i+1 !=college.size()) coursesFile << endl;//no empty last if last record 
+  }
+  
+  for(int i=0;i<college.size(); i++){//printing course info into console
+    cout << "Class: " << college.at(i).getClass() << " ";
+    cout << "Professor: " << college.at(i).getProfessor() << " ";
+    cout << "Student: " << college.at(i).getStudent() << " ";
+    cout << "Availability: " << college.at(i).getAvailable() << " ";
+    cout << endl;
+  }
+  for(int i=0;i<students.size(); i++){ //writing back student info to file
+    studentsFile << students.at(i).getName() <<endl;
+    studentsFile << students.at(i).getUsername() << endl;
+    studentsFile << students.at(i).getPassword() << endl;
+    temp = students.at(i).getClass();
+    if (temp.size()!=0){
+      for (int j=0; j<temp.size(); j++){
+        studentsFile <<temp.at(j);
+         if(j+1 !=temp.size()) studentsFile << ',';
+      }
+      temp.clear();
+    }
+    if(i+1 !=students.size()) studentsFile << endl;//no empty last if last record 
+  }
+  for(int i=0; i<students.size(); i++){
+    cout << "Name: " << students.at(i).getName() << " ";
+    cout << "Username: " << students.at(i).getUsername() << " ";
+    cout << "Password: " << students.at(i).getPassword() << " ";
+    cout << "Courses: " << endl;
+     temp = students.at(i).getClass();
+    if (temp.size()!=0){
+      for (int j=0; j<temp.size(); j++){
+        cout <<temp.at(j)<< endl;
+      }
+      temp.clear();}
+      else cout << "None";
+    cout << endl;
+  }
+  coursesFile.close();
+  studentsFile.close();
+}
