@@ -1,0 +1,41 @@
+#include <iostream>
+using namespace std;
+
+void bubblesort(int a [], int size)
+{
+  int tmp=0;
+  bool change = false;
+  do{
+    change=false;
+    for(int i=0;i<size-1;i++)
+    {
+ if(a[i]>a[i+1]) 
+    {
+      tmp = a[i];
+      a[i] = a[i+1];
+      a[i+1] = tmp;
+      change = true; 
+    }
+    }
+   }
+   while(change==true);
+}
+
+void print(int a[], int size)
+{
+  for(int i=0;i<=size-1;i++)
+   {
+     cout << a[i] << ' ';
+   }
+   cout << endl;
+}
+
+int main() {
+  int array[10] = {3, 0, 1, 8, 7, 2, 5, 4, 6, 9};
+  int array1[5] = {3, 1, 4, 1, 5};
+
+  bubblesort(array, 10);
+  bubblesort(array1, 5);
+  print(array, 10);
+  print(array1, 5);
+}
