@@ -1,0 +1,26 @@
+#include <iostream>
+#include<string>
+using namespace std;
+
+int isPrime(int); //prototype
+
+int main() {
+  int x;
+
+  cout << "Enter your number to check if it is a prime number" << endl;
+  cin >> x;
+  
+  if(isPrime(x)==1) cout << "It is a prime number";
+  else cout << "It is not a prime number"; 
+}
+
+
+int isPrime(int n)//function definition
+{
+  for(int i=2;i<=n/2;i++){
+    if(n%i==0){
+      return 0;
+    }
+  }
+   return 1;
+}
