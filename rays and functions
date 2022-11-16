@@ -1,0 +1,42 @@
+#include <iostream>
+#include<string>
+
+using namespace std;
+
+void modifyArray(int[], int);//prototype
+void printtwo(int x)
+{
+  cout << "Hello from function printtwo, I was passed "<< x << endl;
+}
+
+void print(int n[], int size)
+{
+  for(int i=0;i<size;i++)
+  {
+    cout << n[i] << ' ';
+  }
+  cout << "Hello from print";
+  printtwo(size);
+}
+
+
+int main() {
+  int a[5] = {3, 1, 4, 1, 5};
+  int b[4] = {3, 2, 1, 0};
+  modifyArray(a, 5); cout << endl;
+  modifyArray(b, 4);
+  // cout << "This is the first array\n" ;
+  // print(a, 5);
+  // cout << "\n";
+  // cout << "This is the second array\n";
+  // print(b, 4);
+}
+
+void modifyArray(int array[], int size){
+  for(int i=0;i<=size;i++)
+  {
+    array[i]++;
+  }
+  cout << "Hello from function modifyArray" << endl;
+  print(array, size);
+}
