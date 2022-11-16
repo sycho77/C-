@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+void towers(int n, char source, char dest, char tmp);
+int cnt=0;
+int main() {
+  towers(3, 'A', 'C', 'B');
+  cout << cnt;
+}
+
+void towers(int n, char source, char dest, char tmp){
+  if (n==1) {cout << "Disk " << n << " move from " << source << " to " << dest<<endl;
+  cnt ++;
+  return;}
+cnt ++;
+towers(n-1, source, tmp, dest); //*Source to Tmp(dest)
+cout << "Disk " << n << " move from " << source << " to " << dest<<endl;
+towers(n-1, tmp, dest, source);
+
+}
